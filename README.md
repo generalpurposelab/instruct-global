@@ -1,3 +1,2 @@
-# Code and documentation for instruct-global.
+# Data and code for instruct-global
 
-# test
