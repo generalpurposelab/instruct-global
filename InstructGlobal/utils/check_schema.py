@@ -2,16 +2,17 @@ import os
 import pandas as pd
 
 class Check:
-    def __init__(self, input_dir, api_key, model, target_language, language_code):
+    def __init__(self, input_dir, api_key, model, target_language, language_code, size):
         self.input_dir = input_dir
         self.api_key = api_key
         self.model = model
         self.target_language = target_language
         self.language_code = language_code
+        self.size = size
 
         if not self.api_key:
             print("Error: API key is not provided.")
-        if not self.api_key:
+        if not self.model:
             print("Error: Model not provided.")
         if not self.target_language:
             print("Error: Target language is not provided.")
@@ -45,3 +46,11 @@ class Check:
             if pd.isnull(row['category']) or pd.isnull(row['description']):
                 print(f"Error: Missing values in category or description for the file {row['file_name']}.")
                 return
+    
+    def confirm(self):
+        print(f"InstructGlobal is initialized to create a {self.size} row dataset in {self.target_language} (language code: {self.language_code})")
+        proceed = input("Do you want to proceed? (yes/no): ")
+        if proceed.lower() not in ["yes", "y"]:
+            print("InstructGlobal cancelled")
+            return False
+        return True

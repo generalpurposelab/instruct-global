@@ -2,7 +2,7 @@ task_category,task_description,percent,av_length,length_std
 classification,"categorize or label the provided content into predefined classes or groups",0.03,223,318
 extraction,"identify and retrieve specific pieces of information or data points from a larger text or dataset",0.02,304,373
 generation,"produce text or content that is original and relevant to the given context or prompt, such as writing stories, generating reports, or creating descriptive text",0.47,130,223
-multiple choice,"provide a set of options or answers to a question, from which the correct or most appropriate one should be selected",0.03,325,426
+multiple-choice,"provide a set of options or answers to a question, from which the correct or most appropriate one should be selected",0.03,325,426
 question-answer,"provide a clear and concise answer to a posed question, ensuring the response is relevant and accurate based on the information given",0.14,89,193
 rewrite,"modify a given text to change its form or style while retaining its original meaning, such as paraphrasing, simplifying, or changing the tone",0.03,183,237
 translation,"convert text from one language to another, ensuring the translation maintains the original meaning, tone, and nuance",0.03,183,237

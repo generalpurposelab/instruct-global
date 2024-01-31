@@ -10,21 +10,23 @@ class Translator:
         self.parent = f"projects/{project_id}/locations/{self.location}"
 
     def translate_text(self, text: str, language_code: str) -> translate.TranslationServiceClient:
-        response = self.client.translate_text(
-            request={
-                "parent": self.parent,
-                "contents": [text],
-                "mime_type": "text/plain",  # mime types: text/plain, text/html
-                "source_language_code": "en-US",
-                "target_language_code": language_code,
-            }
-        )
+        if not text:  # if text is empty
+            return ""
 
-        # Display the translation for each input text provided
-        for translation in response.translations:
-            print(f"{translation.translated_text}")
-
-        return response
+        try:
+            response = self.client.translate_text(
+                request={
+                    "parent": self.parent,
+                    "contents": [text],
+                    "mime_type": "text/plain",  
+                    "source_language_code": "en-US",
+                    "target_language_code": language_code,
+                }
+            )
+            return response
+        except Exception as e:
+            # print(f"An error occurred during translation: {e}")
+            return ""
 
 """
 text_to_translate = "Hello, world!"

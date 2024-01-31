@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 from openai import OpenAI
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import pandas as pd
@@ -45,14 +46,18 @@ class Generate:
         response = self.generate_instructions("q_and_a")
         # extract output into df
         function_call = response.choices[0].message.tool_calls[0].function
+        try:
+            arguments = json.loads(function_call.arguments)
+        except JSONDecodeError:
+            arguments = {}
         arguments = json.loads(function_call.arguments)
         instructions = {k: v for k, v in arguments.items() if "Instruction" in k}
         inputs = {k: v for k, v in arguments.items() if "Input" in k}
         outputs = {k: v for k, v in arguments.items() if "Output" in k}
         df = pd.DataFrame({
-            'Instruction': [instructions.get(f"Instruction {i}") for i in range(1, self.n+1)],
-            'Input': [inputs.get(f"Input {i}") for i in range(1, self.n+1)],
-            'Output': [outputs.get(f"Output {i}") for i in range(1, self.n+1)]
+            'instruction_en': [instructions.get(f"Instruction {i}") for i in range(1, self.n+1)],
+            'input_en': [inputs.get(f"Input {i}") for i in range(1, self.n+1)],
+            'output_en': [outputs.get(f"Output {i}") for i in range(1, self.n+1)]
         })
         
         # Extract completion_tokens and prompt_tokens

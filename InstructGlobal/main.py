@@ -1,144 +1,160 @@
-import os
 import csv
 import json
-import math
-import random
-from tqdm import tqdm
 
 from InstructGlobal.utils.check_schema import Check
-from InstructGlobal.utils.create_instruction import CreateInstruction
+from InstructGlobal.utils.create_csv import CreateCSV
+from InstructGlobal.utils.load_schema import LoadSchema, FileHandler
+from InstructGlobal.utils.generate_instructions import Generate
+from InstructGlobal.utils.translate_instructions import Translator
 
-class FileHandler:
-    @staticmethod
-    def read_csv(file_path):
-        with open(file_path, 'r') as f:
-            reader = csv.DictReader(f)
-            return list(reader)
-
-    @staticmethod
-    def load_json(file_path):
-        with open(file_path) as json_file:
-            return json.load(json_file)
+BATCH_SIZE = 10
 
 class InstructGlobal:
-    MAX_TASKS_PER_ITERATION = 5
-    def __init__(self, api_key, target_language, language_code, model="gpt-3.5-turbo", input_dir="input", output_dir="output", size=50000):
+    def __init__(self, api_key, target_language, language_code, model="gpt-3.5-turbo", input_dir="input", output_dir="output", size=50000, google_project_id="global-instruct"):
+        self.api_key = api_key
+        self.model = model
         self.target_language = target_language
         self.language_code = language_code
         self.size = size
         self.input_dir = input_dir
         self.output_dir = output_dir
-        self.max_tasks_per_iteration = InstructGlobal.MAX_TASKS_PER_ITERATION
-        self.create_instruction = CreateInstruction(input_dir, api_key, model)  
-        self.check = Check(input_dir, api_key, model, target_language, language_code)
-        self.output_schema = self.load_output_schema()
-        self.input_schema = self.load_input_schema()
+        self.check = Check(input_dir, api_key, model, target_language, language_code, size)
+        self.load_schema = LoadSchema(size)
+        self.output_schema = self.load_schema.load_output_schema()
+        self.input_schema = self.load_schema.load_input_schema()
+        self.translator = Translator(project_id=google_project_id)
+        with open('InstructGlobal/data/prompts.json', 'r') as f:
+            self.prompts = json.load(f)
 
-    def load_output_schema(self):
-        """
-        Creates dict from output_schema.csv
-        """
-        output_schema_data = FileHandler.read_csv("InstructGlobal/data/output_schema.csv")
-        output_schema = {row['task_category'].strip().lower(): {
-            'task_description': row['task_description'].strip(),
-            'total_n': math.ceil((self.size * float(row['percent'].strip()))),
-            'av_length': row['av_length'].strip(),
-            'length_std': row['length_std'].strip()
-        } for row in output_schema_data}
-        return output_schema
+    def process_csv(self):
+        csv_file_path = f"{self.output_dir}/instruct-global-{self.language_code}.csv"
+        csv_data = FileHandler.read_csv(csv_file_path)
 
-    def load_input_schema(self):
-        """
-        Creates dict from input_schema.csv
-        """
-        input_schema_data = FileHandler.read_csv("input/input_schema.csv")
-        input_schema = {}
-        for row in input_schema_data:
-            category = row['category'].strip()
-            input_schema.setdefault(category, []).append(row)
-        return input_schema
+        # Initialize batch and its source and category
+        batch = []
+        batch_source = csv_data[0]['source']
+        batch_category = csv_data[0]['category']
 
-    def load_seeds(self, task_category):
-        data = FileHandler.load_json('InstructGlobal/data/seed_tasks.jsonl')
-        data = [item for item in data if item['category'] == task_category]
-        return random.sample(data, 1)
+        # Open the CSV file in write mode to write the header
+        with open(csv_file_path, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=csv_data[0].keys())
+            writer.writeheader()
 
-    def run_checks(self):
-        self.check.run()
+        # Process rows in batches
+        for row in csv_data:
+            if row['source'] == batch_source and row['category'] == batch_category and len(batch) < BATCH_SIZE:
+                batch.append(row)
+            else:
+                # Process the batch and write it to the CSV file
+                self.process_and_write_batch(batch, csv_file_path)
 
-    def confirm(self):
-        print(f"InstructGlobal is initialized to create a {self.size} row dataset in {self.target_language} (language code: {self.language_code})")
-        proceed = input("Do you want to proceed? (yes/no): ")
-        if proceed.lower() not in ["yes", "y"]:
-            print("InstructGlobal cancelled")
-            return False
-        return True
+                # Start a new batch
+                batch = [row]
+                batch_source = row['source']
+                batch_category = row['category']
 
-    def process_task(self, total_n, task_category, csv_file=None, pbar=None):
-        """
-        Process a task for a given category and CSV file.
+        # Process the last batch and write it to the CSV file
+        self.process_and_write_batch(batch, csv_file_path)
 
-        Parameters:
-        total_n (int): The total number of tasks to process.
-        task_category (str): The category of the task.
-        csv_file (str): The path to the CSV file containing the task data. If None, an empty task is processed.
+    def process_and_write_batch(self, batch, csv_file_path):
+        # Construct a single prompt for the entire batch
+        batch_row = batch[0]
+        batch_size=len(batch)
+        prompt_data = self.construct_prompt(category=batch_row['category'], prompt='prompt_no_variables' if batch_row['source'] == 'self-instruct' else 'prompt_variables', csv=batch_row['source'], batch_size=batch_size)
 
-        Returns:
-        None
-        """
-        i = 0
-        if csv_file:
-            csv_file_name = csv_file['file_name']
-            csv_file_path = os.path.join(self.input_dir, f'{csv_file_name}')
-            input_data = FileHandler.read_csv(csv_file_path)
-            header = input_data[0]
-            # i = 1
-            while i < total_n:
-                n = min(self.MAX_TASKS_PER_ITERATION, total_n - i)
-                if i < len(input_data):
-                    row = input_data[i]
-                    input_data_row = dict(zip(header, row))
-                    # print(input_data_row)
-                    input_data_row.setdefault('num_variables', '0')
-                    self.create_instruction.process_task(n, task_category, input_data_row, self.output_schema[task_category.strip().lower()], self.output_dir, self.language_code, self.target_language)
-                i += 1
-                if pbar is not None:
-                    pbar.update(n)
-        else:  # If csv_files is empty
-            input_data_row = {'num_variables': '0'}
-            while i < total_n:
-                n = min(self.MAX_TASKS_PER_ITERATION, total_n - i)
-                self.create_instruction.process_task(n, task_category, input_data_row, self.output_schema[task_category.strip().lower()], self.output_dir, self.language_code, self.target_language)
-                i += 1
-                if pbar is not None:
-                    pbar.update(n)
+        # Feed the prompt into create_instructions function
+        instructions = self.create_instructions(prompt_data, batch_size)
+        
+        # translate the instructions
+        translated_instructions = self.translate(instructions)
 
-    def create_instructions(self):
-        """
-        Create instructions for all task categories.
+        # Update each row in the batch with the corresponding instruction
+        for i, row in enumerate(batch):
+            row.update(instructions[i])
+            row.update(translated_instructions[i])
 
-        Returns:
-        None
-        """
-        total_tasks = sum(info['total_n'] for info in self.output_schema.values())
-        with tqdm(total=total_tasks, desc="Processing tasks", ncols=70) as pbar:
-            for task_category, task_info in self.output_schema.items():
-                total_n = task_info['total_n']
-                csv_files = self.input_schema.get(task_category, [])  # Get all csv files for this task_category, default to empty list if not found
-                if csv_files:  # If csv_files is not empty
-                    for csv_file in csv_files:
-                        self.process_task(total_n, task_category, csv_file, pbar)
-                else:  # If csv_files is empty
-                    self.process_task(total_n, task_category, pbar=pbar)
+        # Write the batch to the CSV file
+        with open(csv_file_path, 'a', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=batch[0].keys())
+            writer.writerows(batch)
     
-    def run(self):
-        """
-        Runs instruct-global.
+    def translate(self, instructions):
+        # Initialize a list to store the translated instructions
+        translated_instructions = []
 
-        Returns:
-        None
-        """
-        self.run_checks()
-        if not self.confirm():
+        # Iterate over the instructions
+        for instruction in instructions:
+            # Translate the instruction, input, and output
+            translated_instruction = self.translator.translate_text(instruction['instruction_en'], self.language_code)
+            translated_input = self.translator.translate_text(instruction['input_en'], self.language_code)
+            translated_output = self.translator.translate_text(instruction['output_en'], self.language_code)
+
+            # Check if the translation was successful
+            if not isinstance(translated_instruction, str):
+                translated_instruction = translated_instruction.translations[0].translated_text
+            if not isinstance(translated_input, str):
+                translated_input = translated_input.translations[0].translated_text
+            if not isinstance(translated_output, str):
+                translated_output = translated_output.translations[0].translated_text
+
+            # Add the translated instruction, input, and output to the list
+            translated_instructions.append({
+                f'instruction_{self.language_code}': translated_instruction,
+                f'input_{self.language_code}': translated_input,
+                f'output_{self.language_code}': translated_output,
+            })
+
+        return translated_instructions
+
+    def create_instructions(self, prompt, batch_size):
+        # Initialize the Generate class
+        generator = Generate(self.api_key, self.model, prompt, batch_size)
+
+        # Run the generator and get the DataFrame
+        df = generator.run(prompt, batch_size)
+
+        # Convert the DataFrame to a list of dictionaries
+        instructions = df.to_dict('records')
+        # print(instructions)
+
+        return instructions
+
+    def construct_prompt(self, category, prompt, csv, batch_size):
+        # Fetch the corresponding prompt from prompts.json
+        prompt_template = self.prompts[prompt]
+        
+        if prompt == 'prompt_no_variables':
+            new_prompt = prompt_template.format(
+                n=batch_size,
+                task_category=category,
+                task_description=self.output_schema[category]['task_description'],
+                target_language=self.target_language,
+                av_length=self.output_schema[category]['av_length'],
+                length_std=self.output_schema[category]['length_std'],
+            )
+        else:
+            input_schema_row = next((row for row in self.input_schema[category] if row['file_name'] == csv), None)
+            new_prompt = prompt_template.format(
+                n=batch_size,
+                task_category=category,
+                task_description=self.output_schema[category]['task_description'],
+                dataset_description=input_schema_row['description'],
+                num_variables=input_schema_row['num_variables'],
+                variable_placeholders=', '.join([f'{{variable_{i}}}' for i in range(1, int(input_schema_row['num_variables']) + 1)]),
+                variable_descriptions=', '.join([input_schema_row[f'variable_{i}_description'] for i in range(1, int(input_schema_row['num_variables']) + 1)]),                
+            )
+        return new_prompt
+
+    
+    def create_and_run_csv(self):
+        csv_creator = CreateCSV(self.output_dir, self.language_code, self.output_schema, self.input_schema, self.input_dir)
+        csv_creator.construct_csv()
+
+    def run(self):
+        # Run checks
+        self.check.run()
+        # Use confirm from Check
+        if not self.check.confirm():
             return
-        self.create_instructions()
+        self.create_and_run_csv()
+        self.process_csv()
