@@ -1,0 +1,3 @@
+Instruction,Input,Output
+"Classify the following text based on its sentiment: positive, negative, or neutral.",I had an amazing time at the beach today! The weather was perfect.,positive
+"Given the list of email subject lines, determine which category each belongs to: Promotional, Informational, or Personal.",1. Big Sale This Weekend Only! 2. Your Monthly Newsletter 3. Lunch Next Week?,1. Promotional 2. Informational 3. Personal

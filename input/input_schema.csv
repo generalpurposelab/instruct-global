@@ -1,0 +1,6 @@
+file_name,category,description,num_variables,variable_1_description,variable_2_description,variable_3_description,total
+yosm.csv,classification,sentiment analysis of movie reviews,2,movie review,sentiment analysis (postive or negative),,1
+flores.csv,translation,parallel sentences in english and yoruba,2,sentence in english,translation in yoruba,,2
+belebele.csv,multiple-choice,four multiple-choice answers linked to a short passage as well as the correct answer,3,"question and four multiple-choice answers (A, B, C, or D)",short passage,correct answer,3
+xlsum.csv,summarisation,annotated article-summary pairs from BBC,2,article,summary,,2
+afrisenti.csv,classification,tweets with sentiment analysis,2,tweets,sentiment analysis (positive or negative),,2

@@ -1,0 +1,7 @@
+file_name,category,description,num_variables,variable_1_description,variable_2_description,variable_3_description,total,complete
+yosm.csv,classification,sentiment analysis of movie reviews,2,movie review,sentiment analysis (postive or negative),,1501,FALSE
+flores.csv,translation,parallel sentences in english and yoruba,2,sentence in english,translation in yoruba,,2009,FALSE
+belebele.csv,multiple-choice,four multiple-choice answers linked to a short passage as well as the correct answer,3,"question and four multiple-choice answers (A, B, C, or D)",short passage,correct answer,900,FALSE
+afriqa.csv,question-answer,questions and answers based on the first 250 characters of the most popular Wikipedia articles in Yoruba,2,question,answer,,1053,TRUE
+xlsum.csv,summarisation,annotated article-summary pairs from BBC,2,article,summary,,"7936",FALSE
+afrisenti.csv,classification,tweets with sentiment analysis,2,tweets,sentiment analysis (positive or negative),,15128,FALSE
