@@ -4,12 +4,29 @@ from openai import OpenAI
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import pandas as pd
 
+# import os, openlayer
+# from openlayer import llm_monitors
+# OPENLAYER_API_KEY = "IOQJI7Ez4IbsouOIPZPithJRxSaVR3Yy"
+# OPENLAYER_PROJECT_NAME = "My project"
+# os.environ["OPENLAYER_API_KEY"] = OPENLAYER_API_KEY
+# os.environ["OPENLAYER_PROJECT_NAME"] = OPENLAYER_PROJECT_NAME
+
 class Generate:
-    def __init__(self, openai_api_key, model, prompt, n):
+    def __init__(self, openai_api_key, model, n):
         self.client = OpenAI(api_key=openai_api_key)
         self.model = model
-        self.prompt = prompt
         self.n = n
+        # monitor = llm_monitors.OpenAIMonitor(client=self.client, publish=True)
+        # monitor.start_monitoring()
+
+    def create_instructions(self, prompt, batch_size):
+        # Run the generator and get the DataFrame
+        df = self.run(prompt, batch_size)
+
+        # Convert the DataFrame to a list of dictionaries
+        instructions = df.to_dict('records')
+
+        return instructions
 
     def run(self, prompt, n):
         self.prompt = prompt
