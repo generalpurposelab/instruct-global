@@ -6,7 +6,7 @@ target_language = "Yoruba"
 language_code = "yo"
 input_dir="input"
 output_dir="output"
-size=100
+size=50
 google_project_id = "global-instruct"
 
 pipeline = InstructGlobal(

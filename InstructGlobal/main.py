@@ -8,7 +8,7 @@ from InstructGlobal.utils.translate_instructions import Translator
 from InstructGlobal.utils.process_csv import CSVProcessor
 from InstructGlobal.utils.construct_prompt import PromptConstructor
 
-BATCH_SIZE = 10
+BATCH_SIZE = 5
 
 class InstructGlobal:
     def __init__(self, openai_api_key, target_language, language_code, model="gpt-3.5-turbo", input_dir="input", output_dir="output", size=50000, google_project_id=None):
@@ -24,7 +24,7 @@ class InstructGlobal:
         self.output_schema = self.load_schema.load_output_schema()
         self.input_schema = self.load_schema.load_input_schema()
         self.translator = Translator(project_id=google_project_id)
-        self.csv_processor = CSVProcessor(self.output_dir, self.language_code, BATCH_SIZE, self.input_schema)
+        self.csv_processor = CSVProcessor(self.output_dir, self.language_code, BATCH_SIZE, self.input_schema, self.input_dir)
         self.prompt_constructor = PromptConstructor(self.output_schema, self.input_schema, self.language_code)
         self.generator = Generate(self.openai_api_key, self.model, BATCH_SIZE)
         with open('InstructGlobal/data/prompts.json', 'r') as f:
