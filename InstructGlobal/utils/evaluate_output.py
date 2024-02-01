@@ -1,8 +1,6 @@
 class Evaluate:
-    def __init__(self, instructions, batch, csv_file_path):
+    def __init__(self, instructions):
         self.instructions = instructions
-        self.batch = batch
-        self.csv_file_path = csv_file_path
         
     def run(self):
         # You can now use self.input_schema in this method

@@ -24,7 +24,7 @@ class InstructGlobal:
         self.output_schema = self.load_schema.load_output_schema()
         self.input_schema = self.load_schema.load_input_schema()
         self.translator = Translator(project_id=google_project_id)
-        self.csv_processor = CSVProcessor(self.output_dir, self.language_code, BATCH_SIZE)
+        self.csv_processor = CSVProcessor(self.output_dir, self.language_code, BATCH_SIZE, self.input_schema)
         self.prompt_constructor = PromptConstructor(self.output_schema, self.input_schema, self.language_code)
         self.generator = Generate(self.openai_api_key, self.model, BATCH_SIZE)
         with open('InstructGlobal/data/prompts.json', 'r') as f:
