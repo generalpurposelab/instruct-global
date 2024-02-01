@@ -1,10 +1,4 @@
-google-cloud-translate==2.0.1
-ijson==3.2.3
-json==
-
-scipy
-tenacity
-tiktoken
-termcolor 
-openai
-openlayer
+google-cloud-translate==3.14.0
+openai==1.10.0
+tenacity==8.2.2
+pandas==2.0.3

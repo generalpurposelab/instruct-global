@@ -1,65 +1,65 @@
-## GlobalInstruct - a framework for fine-tuning LLMs in low resource languages and an open-source registry of ...
+# Instruct-Global
 
-GlobalInstruct is a collection of tools to build instruction datasets, and fine-tune and evaluate LLMs in low resource languages.
+Instruct-global automates the process of generating instruction datasets in low-resource languages (LRLs). 
 
-## Overview
+## Background
 
-Fine-tuning LLMs requires building instruction datasets showcasing a diverse set of demonstration conversations to show how to perform a task (often called "few-shot learning"). For example, InstructGPT (the precursor to ChatGPT) was trained on 55k+ examples.
+Language models (LMs) like GPT-4 and LLaMa 2 produce below-par performance in LRLs, particularly on generative tasks (Ojo, Ogueji, Stenetorp, and Adelani., 2023), and are encoded with Western values (Durmus et al, 2023). 
 
-Developing such datasets is difficult in low-resource langauges, because of a scarity of publicly accessible data and the cost of building manually labelled datasets.
+Poor LM performance in LRLs has broader safety implications e.g. translating unsafe English inputs into LRLs have been shown to circumvent LM safeguards (Yong et al., 2023), something we have observed in our own work.
 
-rlhf.app leverages lessons from the [self-instruct paper](https://arxiv.org/abs/2212.10560) to build an dataset that combines answers from publicly accessible and verified sources such as Wikipedia and BBC, and synthetic questions created by existing LLMs. While often not performant in low-resource languages, they are often 'good enough' to create a first draft of a question that then can then be verified by human labelers.
+Instruction fine-tuning has been shown to improve usability (Chung et al., 2022b;; Zhang et al., 2023b; Jiang et al., 2023), multilingual performance (Nguyen et al., 2023; OpenAI, 2023), and embed cultural values (Durmus et al, 2023) within pretrained LMs.
 
-## Scripts
+Constructing human-written instruction data can be expensive, time-consuming and lacking diversity (Ouyang et al., 2022). LMs have been successfully used to self-generate instructions in English (Wang et al, 2023), and show promise at translation for LRLs (Kadaoui et al 2023) with as few as 40 examples shown to improve multilingual instruction-following (Shaham et al, 2024).
 
-The /python folder contains a number of scripts to prepare training datasets and train models. These include:
+## Our Solution
 
-Data processing:
-  - 1_wiki_scrape - scrapes wikipedia in the language of your choice. Wikipedia is currently available in [326 languages](https://meta.wikimedia.org/wiki/List_of_Wikipedias).
-  - 2_bbc_scrape.py - scrapes bbc news in the language of your choice. BBC news is currently available in [n languages](https://bbc.com/).
-  - 3_clean.py - cleans text so it is suitable for training (e.g. ensuring strings are < 4096 tokens)
-  - 4_translate.py - uses LLMs to convert scraped text into a qa dataset
+Inspired by automatic instruction generation including InstructGPT (Ouyang et al., 2022), Self-Instruct (Wang et al., 2023), and Stanford’s Alpaca (Taori et al., 2023), instruct-global combines self-instruct, machine translation with human-in-the-loop (HITL) to transform preexisting high quality datasets (e.g. classification, summarisation etc) into instruction datasets in order to fine tune LMs.
 
-[optional]
-    - At this stage, you can manually edit the translations to ensure accuracy (see evaluating models second below)
+### How It Works
 
-Model training
-  - 5_csv_to_jsonl.py - converts the qa dataset from a csv file to json file (required for finetuning)
-  - 6_check.py - checks whether data is suitable for training and calculates cost of training run
-  - 7_finetune.py - finetunes openai 3.5 using json file
+1. **Data Preparation**: Users input existing data and define a schema detailing the transformation process, including task categories, dataset size, and target languages.
+2. **Schema Mapping**: The input schema is aligned with task categories from established models like InstructGPT.
+3. **Pipeline Processing**:
+   - Creation of 'skeleton questions' in English with placeholders for data insertion.
+   - Evaluation of the skeleton dataset's quality.
+   - Translation of skeleton questions into the target LRL.
+   - Substitution of placeholders with actual data from the input datasets.
+4. **Output Generation**: The process culminates in a CSV file containing the instructional content, translations, and task metadata.
 
-Evaluations
-  - [optional] you can use rlhf.app to create a bank of questions to test your model, or alternatively, you can follow the steps below to use TruthfulQA or other eval datasets
-  - 8_TruthfulQA.py - translates truthfulqa (or other provided datasets) into your specified language
-  - 9_eval.py - uses truthfulqa to create an eval dataset to evluate your models
+## Getting Started
 
-## Training models
+### Prerequisites
 
-Different models require different data formats for fine-tuning. This repo uses the format to train OpenAI's models which contain a list of messages where each message has a role, content, and optional name. For example:
+- An OpenAI API key for GPT model access.
+- A Google Cloud project with the Translation API enabled and credentials configured.
 
-```py
-{"messages": [{"role": "system", "content": "<system message>"}, {"role": "user", "content": "<prompt text>"}, {"role": "assistant", "content": "<ideal generated text>"}]}
-```
+### Setup
 
-## Evaluating models
+1. Clone the repository and navigate to the project directory.
+2. Install dependencies with `pip install -r requirements.txt`.
+3. Configure your OpenAI API key and Google Cloud project ID in `run.py` and add you google credentials file as `cred.json` in the project directory.
+4. Define your input schema in `/input/input_schema.csv` and add your data files. See `/examples` for guidance.
 
-To evaluate the performance of your model, you can run rlhf.app by visiting [rlhf.app](https://rlhf.app/) or running the repo localling using the following:
+### Usage
 
-```bash
-npm install
-npm run dev
-```
+Run `python run.py` to initiate the dataset generation and translation process.
 
-There are various options in the app
+## Challenges and Considerations
+
+- Machine translation errors and their propagation.
+- Increased training and inference costs for text with diacritics.
+- The necessity of local knowledge for identifying reliable sources.
+- Safety and ethical considerations in dataset generation.
 
 ## Roadmap
-- update 1_wiki_scrape so it ensure text is under n tokens
-- update 2_bbc_scrape so it doesn't return headers etc
-- update 3_clean.py so it creates one csv file and ensures text is under n tokens
-- scrape Igbo (ig) and Nigerian Pidgin (pcm) wiki
-- scrape bbc for yoruba, igbo, hausa, and pcm
-- clean - change to check for tokens
-- translate datasets
-- change to check for tokens
 
-due to rounding operations, output may be +- a few extra to input
+Future updates will focus on enhancing the evaluation mechanisms to further improve the quality and reliability of the generated datasets.
+
+## Contributing
+
+We welcome contributions from the community. Please refer to our contribution guidelines for more information on how you can contribute to Instruct-Global.
+
+## License
+
+Instruct-Global is released under the MIT License. See the LICENSE file for more details.

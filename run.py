@@ -1,13 +1,13 @@
 from InstructGlobal.main import InstructGlobal
 
-openai_api_key = "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"
+openai_api_key = "" # insert openai_api_key
 model = "gpt-4-turbo-preview" 
-target_language = "Yoruba"
-language_code = "yo"
+target_language = "Welsh"
+language_code = "cy"
 input_dir="input"
 output_dir="output"
-size=50
-google_project_id = "global-instruct"
+size=100
+google_project_id = "" # add google_project_id and cred.json file to the root dir
 
 pipeline = InstructGlobal(
     openai_api_key=openai_api_key, # insert openai api key

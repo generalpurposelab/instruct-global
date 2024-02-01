@@ -1,5 +1,5 @@
 # process_csv
-
+import time
 import csv
 from InstructGlobal.utils.load_schema import FileHandler
 from InstructGlobal.utils.evaluate_output import Evaluate
@@ -30,6 +30,8 @@ class CSVProcessor:
         with open(csv_file_path, 'w', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=csv_data[0].keys())
             writer.writeheader()
+        
+        overall_start_time = time.time() 
 
         # Process rows in batches
         for row in csv_data:
@@ -39,6 +41,9 @@ class CSVProcessor:
                 # Process the batch and write it to the CSV file
                 source_data_index = self.process_and_write_batch(batch, csv_file_path, translator, create_instructions, construct_prompt, source_data_index, source_data)
 
+                checkpoint_time = time.time() - overall_start_time  # Calculate checkpoint time
+                print(f"Checkpoint at {checkpoint_time:.2f} seconds.")
+
                 # Start a new batch
                 batch = [row]
                 batch_source = row['source']
@@ -46,6 +51,9 @@ class CSVProcessor:
 
         # Process the last batch and write it to the CSV file
         self.process_and_write_batch(batch, csv_file_path, translator, create_instructions, construct_prompt, source_data_index, source_data)
+
+        final_time = time.time() - overall_start_time  # Calculate final time
+        print(f"Total processing time: {final_time:.2f} seconds.") 
 
         # Write the total number of failures to a .txt file
         failures_file_path = f"{self.output_dir}/failures-{self.language_code}.txt"
