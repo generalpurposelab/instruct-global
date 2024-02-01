@@ -45,6 +45,11 @@ Inspired by automatic instruction generation including InstructGPT (Ouyang et al
 
 Run `python run.py` to initiate the dataset generation and translation process.
 
+```
+pip install -r requirements.txt
+python run.py
+```
+
 ## Challenges and Considerations
 
 - Machine translation errors and their propagation.
@@ -56,10 +61,6 @@ Run `python run.py` to initiate the dataset generation and translation process.
 
 Future updates will focus on enhancing the evaluation mechanisms to further improve the quality and reliability of the generated datasets.
 
-## Contributing
+## Authors
 
-We welcome contributions from the community. Please refer to our contribution guidelines for more information on how you can contribute to Instruct-Global.
-
-## License
-
-Instruct-Global is released under the MIT License. See the LICENSE file for more details.
+This library is created by [Equiano Institute](https://equiano.institute), [Masakhane](https://www.masakhane.io/), and [General Purpose](https://general-purpose.io) team members.
