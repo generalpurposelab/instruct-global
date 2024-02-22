@@ -2,7 +2,6 @@
 import time
 import csv
 from InstructGlobal.utils.load_schema import FileHandler
-from InstructGlobal.utils.evaluate_output import Evaluate
 
 class CSVProcessor:
     def __init__(self, output_dir, language_code, batch_size, input_schema, input_dir):

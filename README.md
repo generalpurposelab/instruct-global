@@ -54,7 +54,7 @@ Run `python run.py` to initiate the dataset generation and translation process.
 
 ## Roadmap
 
-Future updates will focus on enhancing the evaluation mechanisms to further improve the quality and reliability of the generated datasets.
+- Add NLLB and MADLAD
 
 ## Contributing
 
