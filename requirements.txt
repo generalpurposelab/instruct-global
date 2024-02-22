@@ -1,4 +1,5 @@
-google-cloud-translate==3.14.0
-openai==1.10.0
-tenacity==8.2.2
-pandas==2.0.3
+openai==1.12.0
+pandas==2.2.0
+protobuf==4.25.3
+tenacity==8.2.3
+transformers==4.38.1

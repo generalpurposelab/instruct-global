@@ -2,7 +2,6 @@
 import time
 import csv
 from InstructGlobal.utils.load_schema import FileHandler
-from InstructGlobal.utils.evaluate_output import Evaluate
 
 class CSVProcessor:
     def __init__(self, output_dir, language_code, batch_size, input_schema, input_dir):
@@ -42,7 +41,7 @@ class CSVProcessor:
                 source_data_index = self.process_and_write_batch(batch, csv_file_path, translator, create_instructions, construct_prompt, source_data_index, source_data)
 
                 checkpoint_time = time.time() - overall_start_time  # Calculate checkpoint time
-                print(f"Checkpoint at {checkpoint_time:.2f} seconds.")
+                # print(f"Checkpoint at {checkpoint_time:.2f} seconds.")
 
                 # Start a new batch
                 batch = [row]

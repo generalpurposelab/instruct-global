@@ -59,7 +59,7 @@ python run.py
 
 ## Roadmap
 
-Future updates will focus on enhancing the evaluation mechanisms to further improve the quality and reliability of the generated datasets.
+- Add NLLB and MADLAD
 
 ## Authors
 
