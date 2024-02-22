@@ -1,13 +1,14 @@
 from InstructGlobal.main import InstructGlobal
 
-openai_api_key = "" # insert openai_api_key
+openai_api_key = "" 
 model = "gpt-4-turbo-preview" 
 target_language = "Yoruba"
 language_code = "yo"
 input_dir="input"
 output_dir="output"
 size=100
-google_project_id = "global-instruct" # add google_project_id and cred.json file to the root dir
+translation_model = "google" 
+google_project_id = "global-instruct"
 
 pipeline = InstructGlobal(
     openai_api_key=openai_api_key, # insert openai api key
@@ -17,7 +18,8 @@ pipeline = InstructGlobal(
     input_dir=input_dir, # add input directory (defaults to /input)
     output_dir=output_dir, # add output directory (defaults to /output)
     size=size, # add dataset size (defaults to 50000)
-    google_project_id=google_project_id # add google project id for translation
+    translation_model=translation_model, # specify translation_model. currently supports "nllb" for meta's nllb and "google" for google translate (the latter requires a project id and cred.json - see below)
+    google_project_id=google_project_id # optional google project id if google translate is used for translation. if google translate is used, you will also have to add your cred.json file to the root dir
 )
 
 pipeline.run()

@@ -6,7 +6,7 @@ import json
 url = 'https://winstxnhdw-nllb-api.hf.space/api/v2/translate'
 headers = {'Content-Type': 'application/json'}
 data = {
-    "text": "Hello world!",
+    "text": "What is the sentiment of this Tweet: {variable_1}",
     "source": "eng_Latn",
     "target": "yor_Latn"
 }
