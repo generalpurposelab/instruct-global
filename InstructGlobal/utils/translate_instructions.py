@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 import json
 from google.cloud import translate
@@ -15,17 +16,45 @@ class Translator:
         self.flores = flores or {}
 
     def translate_text(self, text: str, language_code: str):
-        # print(text)
-        if not text:  # if text is empty
+        if not text:
             return ""
 
+        print("Before translation:", text)
+        placeholders = {}
+        placeholder_pattern = r'\{[^}]*\}'
+        original_placeholders = []
+
+        # Capture placeholders and store them in a list
+        def capture_placeholders(match):
+            original_placeholder = match.group(0)
+            original_placeholders.append(original_placeholder)
+            return original_placeholder
+
+        # Apply the capturing function to find all placeholders
+        re.sub(placeholder_pattern, capture_placeholders, text)
+
+        # Proceed with translation
         if self.translation_model == "nllb":
             flores_code = self.flores.get(language_code, language_code)
-            return self.translate_text_nllb(text, flores_code)
+            translated_text = self.translate_text_nllb(text, flores_code)
         elif self.translation_model == "google":
-            return self.translate_text_google(text, language_code)
+            translated_text = self.translate_text_google(text, language_code)
         else:
             raise ValueError(f"Unsupported translation model: {self.translation_model}")
+
+        # Function to replace translated placeholders with original placeholders
+        def replace_translated_placeholders(match):
+            if original_placeholders:
+                # Pop the first original placeholder from the list and return it
+                return original_placeholders.pop(0)
+            else:
+                return match.group(0)  # If no original placeholders left, return the match itself
+
+        # Replace any structure that matches a placeholder pattern in the translated text
+        translated_text = re.sub(placeholder_pattern, replace_translated_placeholders, translated_text)
+
+        print("After translation:", translated_text)
+        return translated_text
 
     def translate_text_google(self, text: str, language_code: str):
         if not self.project_id:
@@ -67,7 +96,8 @@ class Translator:
         try:
             response = requests.post(url, headers=headers, data=json.dumps(data))
             # print("Response Text:", response.text)
-            return response.text
+            translated_text = response.text.strip()
+            return translated_text
         except Exception as e:
             # print(f"An error occurred: {e}")
             return ""

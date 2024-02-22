@@ -131,10 +131,10 @@ class CSVProcessor:
                 else:
                     self.total_failures += 1
                     attempt += 1
-                    print(f"Failed attempt #{attempt} - trying again.")
+                    # print(f"Failed attempt #{attempt} - trying again.")
 
             if attempt == max_attempts:
-                print("Failed to validate instructions after maximum attempts.")
+                print("Timed out. Skipping and moving onto the next prompt.")
 
             return source_data_index + batch_size
         else:

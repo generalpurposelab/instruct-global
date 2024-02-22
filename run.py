@@ -1,6 +1,6 @@
 from InstructGlobal.main import InstructGlobal
 
-openai_api_key = "" 
+openai_api_key = "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" 
 model = "gpt-4-turbo-preview" 
 target_language = "Yoruba"
 language_code = "yo"
