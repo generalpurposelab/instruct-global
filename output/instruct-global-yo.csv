@@ -1,0 +1,29 @@
+instruction_en,instruction_yo,input_en,input_yo,output_en,output_yo,category,source
+"Read the following movie review: ""Eré ṣíṣe tó fakọyọ, ìdarí tó fi òye hàn ṣùgbọ́n ìtàn yìí kò fi bẹ́ẹ̀ wúni lórí. 
+Mo ní láti sí a sì àkáǹtì kí n lè ṣe àgbéyẹ̀wô eré yìí. Iṣẹ́ yìí rẹwà púpọ̀. 
+"". Determine whether the sentiment of the review is positive or negative and select the appropriate sentiment.","Ka àtúnyẹ̀wò fíìmù yìí: ""Eré ṣíṣe tó fakọyọ, ìdarí tó fi òye hàn ṣùgbọ́n ìtàn yìí kò fi bẹ́ẹ̀ wúni lórí. Mo ní láti sí a sì àkáǹtì kí n lè ṣe àgbéyẹ̀wò eré yìí. Iṣẹ́ yìí rẹwà púpọ̀"".
+","""Eré ṣíṣe tó fakọyọ, ìdarí tó fi òye hàn ṣùgbọ́n ìtàn yìí kò fi bẹ́ẹ̀ wúni lórí. 
+Mo ní láti sí a sì àkáǹtì kí n lè ṣe àgbéyẹ̀wô eré yìí. Iṣẹ́ yìí rẹwà púpọ̀. 
+""","Eré ṣe tó fakọyọ, ìdarí tó fi òye hàn ṣùgbọ́n ìtàn yìí kò fi bẹ́ẹ̀ wúni lórí. Mo ní láti rí àbá kan kí n tó lè ṣe àgbéyẹ̀wò eré yìí. Iṣẹ́ yìí pọ̀ gan-an.
+","""positive""","rere
+",classification,yosm.csv
+"Is the sentiment of this movie review ""Eré gidi tí màá fẹ́ láti rí ìtẹ̀síwájú rẹ̀ ni eré yìí jẹ́. "" more positive or negative? Choose the correct option.","Ṣé èrò inú àwọn tó wo fíìmù yìí ""Eré gidi tí màá fẹ́ láti rí ìtẹ̀síwájú rẹ̀ ni eré yìí jẹ́"". dára tàbí búburú?
+","""Eré gidi tí màá fẹ́ láti rí ìtẹ̀síwájú rẹ̀ ni eré yìí jẹ́. ""","Eré gidi tí màá fé láti rí ìlọsíwájú rẹ̀ nínú eré yìí ni.
+","""positive""","rere
+",classification,yosm.csv
+"Considering the provided movie review ""Nǹkan kan tí ó mo fẹ́ràn nínú eré yìí ni bí a ṣe sọ ìtàn rẹ̀ àti bí àwọn òṣèré ṣe túmọ̀ rẹ̀. Ó yẹ kí a gbé oríyìn fún àwọn òǹkọ̀tàn, olùdarí, àti àwọn a yàwòrán fún làálàá wọn lórí iṣẹ́ yìí. "", categorize it as having a positive or negative sentiment.","Nípa ríronú lórí àyẹ̀wò fíìmù tí a fúnni ""Ohun tí o lè fẹ́ràn nínú eré yìí àti bí a ṣe sọ ìtàn rẹ àti bí àwọn òṣèré ṣe ṣe é. Ó yẹ kí o fún àwọn òǹkọ̀wé, olùkọ́, àti àwọn òǹkọ̀wé ní ìtìlẹyìn fún ìsapá wọn lórí iṣẹ́ yìí. "", pín in sí àwọn tí ó ní èrò rere tàbí èrò òdì.
+","""Nǹkan kan tí ó mo fẹ́ràn nínú eré yìí ni bí a ṣe sọ ìtàn rẹ̀ àti bí àwọn òṣèré ṣe túmọ̀ rẹ̀. Ó yẹ kí a gbé oríyìn fún àwọn òǹkọ̀tàn, olùdarí, àti àwọn a yàwòrán fún làálàá wọn lórí iṣẹ́ yìí. ""","Ohun kan tí mo fẹ́ràn nípa eré yìí ni bí a ṣe sọ ìtàn rẹ̀ àti bí àwọn òṣèré ṣe ṣe é. Ó yẹ kí n fi ìyìn fún àwọn òǹkọ̀wé, olùkọ́, àti àwọn òǹkọ̀wé àwòrán fún ìsapá wọn lórí iṣẹ́ yìí.
+","""positive""","rere
+",classification,yosm.csv
+Classify the sentiment of the tweet by assigning either 'positive' or 'negative' to it.,"Ṣe àtọ́ka èrò inú ìkànnì náà nípa fífi 'ìdùn' tàbí 'ìdùn' sí i.
+","""RT @user: @user asa kasa ti awon eyan ko ni odo awon oyinbo tiko mu ogbon wa, koda rara,atipe ounse okunfa alebu ati arun"": A tweet from a user expressing their thoughts on a recent event.","RT @user: @user asa kasa ti awon eyan ko ni odo awon oyinbo tiko mu ogbon wa, koda rara,atipe ounse okunfa alebu ati arun"": A tweet from a user expressing their thoughts on a recent event.
+","""negative"": A label denoting the sentiment of the tweet as either 'positive' or 'negative'.","àbùkù"": Àmì kan tó ń fi hàn pé èrò inú ìkànnì náà jẹ́'rere' tàbí 'kò dára'.
+",classification,afrisenti.csv
+"Is the sentiment behind ""RT @user: Mo ń rí àwọn èébú kọ̀ọ̀kan. Àti àwọn tí wọ́n ń fi wá ṣe yẹ̀yẹ́. Ẹ fiwọ́n sílẹ̀, ara ló ń ta wọ́n. Àwa ò ní fi ọwọ́ òs ..."" positive or negative? Provide your answer.","Ṣé èrò tó wà lẹ́yìn ""RT @user: Mo ń rí àwọn èébù kọ̀̀ọ̀kan. Àti àwọn tí wó n wá ṣe yẹ̀yẹ́. Ẹ fiwọ́n sílẹ̀, ara ló ń ta wọ́n. Àwa ò ní fi ọwọ́ òs..."" dára àbí kò dára? Sọ ìdáhùn rẹ.
+","""RT @user: Mo ń rí àwọn èébú kọ̀ọ̀kan. Àti àwọn tí wọ́n ń fi wá ṣe yẹ̀yẹ́. Ẹ fiwọ́n sílẹ̀, ara ló ń ta wọ́n. Àwa ò ní fi ọwọ́ òs ..."": A sample tweet text.","RT @user: Mo ń rí àwọn èébù kọ̀̀̀kan. Àti àwọn èébù tí ó wá ṣe yẹ̀yẹ́. Ẹ fiwọ́ sílẹ̀, ara ló ń ta wọ́n. Àwa ò ní ọwọ́ wa..."": Àpẹẹrẹ àròkọ ìkànìyàn.
+","""negative"": 'positive' or 'negative' based on the sentiment analysis of the tweet.","àbùkù"": 'ìdùn' tàbí 'àbùkù' ní ìbámu pẹ̀lú àyẹ̀wò èrò inú lórí ìkànnì Twitter náà.
+",classification,afrisenti.csv
+"Review the content of ""Ọ̀rọ̀ wo ló wà lẹ́nu bàbá Ìyábọ̀ gan àn? Kí ni Ọbásanjọ́ ń wò o? @user » @user #Nigeria http://t.co/nDKiXyzz1p"" and determine whether it reflects a positive or negative sentiment. Then, label accordingly.","Tún àlàyé lórí ""Ọ̀rọ̀ wo ló wà lẹ́nu bàbá Ìyábọ̀ gan àn? Kí ni Ọbásanjọ́ ń wò o? @user <unk> @user #Nigeria http://t.co/nDKiXyzz1p"" wò, kó o sì pinnu bóyá ó ń fi èrò tó dára tàbí èyí tí kò dára hàn.
+","""Ọ̀rọ̀ wo ló wà lẹ́nu bàbá Ìyábọ̀ gan àn? Kí ni Ọbásanjọ́ ń wò o? @user » @user #Nigeria http://t.co/nDKiXyzz1p"": A user's tweet about their day.","Ó̀rọ̀ wo ló wà wà l'ẹ̀nu bàbá Ìyábọ̀ gan àn? Kí ni Ọbásanjọ́ ń wò o? @user <unk> @user #Nigeria http://t.co/nDKiXyzz1p"": Àkọlé àwòrán, Twitter
+","""negative"": The sentiment of the tweet categorized as either 'positive' or 'negative'. ","àbùkù"": Àròjinlẹ̀ lórí ìkànnì Twitter tí a yà sí 'ìdùn' tàbí 'ìdùn'.
+",classification,afrisenti.csv

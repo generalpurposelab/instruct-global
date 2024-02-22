@@ -78,6 +78,19 @@ class CSVProcessor:
     def process_and_write_batch(self, batch, csv_file_path, translator, create_instructions, construct_prompt, source_data_index=0, source_data=None):
         batch_row = batch[0]
         batch_size = len(batch)
+
+        # Construct the prompt with possibly translated instructions or based on the need
+        prompt_data = construct_prompt(category=batch_row['category'], prompt='prompt_no_variables' if batch_row['source'] == 'self-instruct' else 'prompt_variables', csv=batch_row['source'], batch_size=batch_size)
+
+        # Create instructions first, now including the prompt_data as the first argument
+        instructions = create_instructions(prompt_data, batch_size)
+        # print(instructions)
+
+        # Translate instructions
+        translated_instructions = translator(instructions)
+        # print("process_csv:", translated_instructions)
+
+        # Now, construct the prompt, substituting in variables 
         prompt_data = construct_prompt(category=batch_row['category'], prompt='prompt_no_variables' if batch_row['source'] == 'self-instruct' else 'prompt_variables', csv=batch_row['source'], batch_size=batch_size)
 
         if batch_row['source'] != 'self-instruct':

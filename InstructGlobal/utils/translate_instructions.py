@@ -62,21 +62,21 @@ class Translator:
             "source": "eng_Latn",
             "target": flores_code
         }
-        print(data)
+        # print(data)
 
         try:
             response = requests.post(url, headers=headers, data=json.dumps(data))
-            response_data = response.json()
-            print(response_data)
-            return response_data[0]['translatedText']
+            # print("Response Text:", response.text)
+            return response.text
         except Exception as e:
+            # print(f"An error occurred: {e}")
             return ""
 
     def translate_instructions(self, instructions, language_code):
         translated_instructions = []
 
         for instruction in instructions:
-            print(instruction)
+            # print(instruction)
             translated_instruction = self.translate_text(instruction['instruction_en'], language_code)
             translated_input = self.translate_text(instruction['input_en'], language_code)
             translated_output = self.translate_text(instruction['output_en'], language_code)
@@ -94,4 +94,5 @@ class Translator:
                 f'output_{language_code}': translated_output,
             })
 
+        # print("translate_instructions:", translated_instructions)
         return translated_instructions
