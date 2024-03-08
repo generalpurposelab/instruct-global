@@ -1,10 +1,10 @@
-# Instruct-Global
+# instruct-global
 
-Instruct-global automates the process of generating instruction datasets in low-resource languages (LRLs). 
+instruct-globalsemi-automates the generations of instruction fine-tuning datasets in low-resource languages (LRLs). 
 
 ## Background
 
-Language models (LMs) like GPT-4 and LLaMa 2 produce below-par performance in LRLs, particularly on generative tasks (Ojo, Ogueji, Stenetorp, and Adelani., 2023), and are encoded with Western values (Durmus et al, 2023). 
+Language models (LMs) produce below-par performance in LRLs, particularly on generative tasks (Ojo, Ogueji, Stenetorp, and Adelani., 2023), and are encoded with Western values (Durmus et al, 2023). 
 
 Poor LM performance in LRLs has broader safety implications e.g. translating unsafe English inputs into LRLs have been shown to circumvent LM safeguards (Yong et al., 2023), something we have observed in our own work.
 
@@ -22,9 +22,8 @@ Inspired by automatic instruction generation including InstructGPT (Ouyang et al
 2. **Schema Mapping**: The input schema is aligned with task categories from established models like InstructGPT.
 3. **Pipeline Processing**:
    - Creation of 'skeleton questions' in English with placeholders for data insertion.
-   - Evaluation of the skeleton dataset's quality.
    - Translation of skeleton questions into the target LRL.
-   - Substitution of placeholders with actual data from the input datasets.
+   - Substitution of placeholders with  data from the input datasets.
 4. **Output Generation**: The process culminates in a CSV file containing the instructional content, translations, and task metadata.
 
 ## Getting Started
@@ -39,28 +38,17 @@ Inspired by automatic instruction generation including InstructGPT (Ouyang et al
 1. Clone the repository and navigate to the project directory.
 2. Install dependencies with `pip install -r requirements.txt`.
 3. Configure your OpenAI API key and Google Cloud project ID in `run.py` and add you google credentials file as `cred.json` in the project directory.
-4. Define your input schema in `/input/input_schema.csv` and add your data files. See `/examples` for guidance.
+4. Define your input schema in `input/input_schema.csv` and add your data files. See `/examples` for an example in Yoruba.
 
-### Usage
+### Notes on using NLLB
 
-Run `python run.py` to initiate the dataset generation and translation process.
+NLLB uses the distilled 1.3B 8-bit quantised model via [nllb-api](https://github.com/winstxnhdw/nllb-api) which comes up against rate limit issues and max length errors.
 
-```
-pip install -r requirements.txt
-python run.py
-```
-
-## Challenges and Considerations
-
-- Machine translation errors and their propagation.
-- Increased training and inference costs for text with diacritics.
-- The necessity of local knowledge for identifying reliable sources.
-- Safety and ethical considerations in dataset generation.
-
-## Roadmap
-
-- Add NLLB and MADLAD
+### Roadmap
+- Support for more models (pplx, claude)
+- Incorporating local version of NLLB downloaded via HF's [Transformers](https://huggingface.co/facebook/nllb-200-distilled-600M) library.
+- Add type annotations
 
 ## Authors
 
-This library is created by [Equiano Institute](https://equiano.institute), [Masakhane](https://www.masakhane.io/), and [General Purpose](https://general-purpose.io) team members.
+This library is created by  [General Purpose](https://general-purpose.io), [Masakhane](https://www.masakhane.io/), and [Equiano Institute](https://equiano.institute) team members.

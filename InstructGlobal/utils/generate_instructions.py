@@ -5,6 +5,20 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 import pandas as pd
 
 class Generate:
+    """
+    Generates synthetic instructions in English using an LLM (defaults to OpenAI).
+
+    Attributes:
+        client (OpenAI): The OpenAI client initialized with an API key.
+        model (str): The model name to use for generating instructions.
+        n (int): The number of instructions to generate.
+
+    Methods:
+        create_instructions(prompt, batch_size): generates instructions based on the prompt and batch size.
+        run(prompt, n): core method to generate instructions and organize them into a df.
+        generate_instructions(tool_name): generate instructions with a structured output.
+
+    """
     def __init__(self, openai_api_key, model, n):
         self.client = OpenAI(api_key=openai_api_key)
         self.model = model

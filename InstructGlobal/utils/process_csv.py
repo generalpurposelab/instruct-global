@@ -4,6 +4,9 @@ import csv
 from InstructGlobal.utils.load_schema import FileHandler
 
 class CSVProcessor:
+    """
+    Processes CSV files in batches, translating instructions, and writing the processed data back to CSV files.
+    """
     def __init__(self, output_dir, language_code, batch_size, input_schema, input_dir):
         self.output_dir = output_dir
         self.language_code = language_code
@@ -13,6 +16,14 @@ class CSVProcessor:
         self.total_failures = 0
 
     def process_csv(self, translator, create_instructions, construct_prompt):
+        """
+        Processes the CSV file in batches, translates instructions, and writes the processed data back to a CSV file.
+        
+        Parameters:
+        - translator (function): A function to translate instructions.
+        - create_instructions (function): A function to create instructions based on the prompt data.
+        - construct_prompt (function): A function to construct prompts for creating instructions.
+        """
         csv_file_path = f"{self.output_dir}/instruct-global-{self.language_code}.csv"
         csv_data = FileHandler.read_csv(csv_file_path)
 
@@ -60,12 +71,33 @@ class CSVProcessor:
             f.write(f"Total failures: {self.total_failures}\n")
 
     def get_num_variables(self, category, source):
+        """
+        Gets the number of variables for a given category and source.
+        
+        Parameters:
+        - category (str): The category of the data.
+        - source (str): The source file name.
+        
+        Returns:
+        int or None: The number of variables if found, otherwise None.
+        """
         for cat in self.input_schema[category]:
             if cat['file_name'] == source:
                 return cat['num_variables']
         return None
     
     def validate_instructions(self, instructions, num_variables, corresponding_source_rows):
+        """
+        Validates if the instructions contain the required variable placeholders.
+        
+        Parameters:
+        - instructions (list): A list of instruction dictionaries.
+        - num_variables (int): The number of variables expected in the instructions.
+        - corresponding_source_rows (list): The source data rows corresponding to the instructions.
+        
+        Returns:
+        bool: True if instructions are valid, False otherwise.
+        """
         num_variables = int(num_variables) if isinstance(num_variables, str) else num_variables
         for instruction in instructions:
             combined_instruction = instruction['instruction_en'] + instruction.get('input_en', '') + instruction.get('output_en', '')
@@ -76,6 +108,21 @@ class CSVProcessor:
         return True
     
     def process_and_write_batch(self, batch, csv_file_path, translator, create_instructions, construct_prompt, source_data_index=0, source_data=None):
+        """
+        Processes a batch of data, translates instructions, and writes the processed data to the CSV file.
+        
+        Parameters:
+        - batch (list): The batch of data to process.
+        - csv_file_path (str): The path to the CSV file where processed data is written.
+        - translator (function): A function to translate instructions.
+        - create_instructions (function): A function to create instructions based on the prompt data.
+        - construct_prompt (function): A function to construct prompts for creating instructions.
+        - source_data_index (int, optional): The index in the source data to start processing from. Defaults to 0.
+        - source_data (list, optional): The source data. Defaults to None.
+        
+        Returns:
+        int: The next index in the source data to start processing from.
+        """
         batch_row = batch[0]
         batch_size = len(batch)
 

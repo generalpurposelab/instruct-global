@@ -2,20 +2,8 @@ import csv
 
 class CreateCSV:
     """
-    CreateCSV is a class designed to construct an output CSV file from given input and output schemas.
-    It reads data from input files, processes them according to the output schema, and writes it to a CSV file.
-
-    Attributes:
-        SELF_INSTRUCT (str): A constant used to indicate where answers will be generated using self-instruction.
-        output_dir (str): The directory where the output CSV file will be saved.
-        language_code (str): The language code used to construct the CSV file.
-        output_schema (dict): The schema used to construct the output CSV file.
-        input_schema (dict): The schema of the input files.
-        input_dir (str): The directory where the input files are located.
-        file_rows (dict): A dictionary to store the rows of each input file.
-        file_counts (dict): A dictionary to store the count of processed rows for each input file.
+    Construct an output CSV file from given input and output schemas. It reads data from input files, processes them according to the output schema, and writes it to a CSV file.
     """
-
     SELF_INSTRUCT = 'self-instruct'
 
     def __init__(self, output_dir, language_code, output_schema, input_schema, input_dir):

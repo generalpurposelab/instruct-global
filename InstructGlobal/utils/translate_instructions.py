@@ -7,6 +7,17 @@ from google.cloud import translate
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "cred.json"
 
 class Translator:
+    """
+    Handle translation using Meta's NLLB (No Language Left Behind) or Google Translate.
+
+    Attributes:
+        translation_model (str): The translation model to use ('google' or 'nllb').
+        project_id (str): Google Cloud project ID for using Google Translate API.
+        flores (dict): Optional mapping of language codes for NLLB translation.
+        model_name (str): The model name for NLLB translation.
+        nllb_mode (str): Mode of NLLB translation ('api' or 'local').
+
+    """
     def __init__(self, project_id: str, translation_model: str = "google", flores=None):
         self.client = translate.TranslationServiceClient()
         self.location = "global"
@@ -16,6 +27,16 @@ class Translator:
         self.flores = flores or {}
 
     def translate_text(self, text: str, language_code: str):
+        """
+        Translates the given text into the specified language (replacing placeholders with text from input schema).
+
+        Args:
+            text (str): The text to translate.
+            language_code (str): The target language code.
+
+        Returns:
+            str: The translated text.
+        """
         if not text:
             return ""
 
@@ -57,6 +78,16 @@ class Translator:
         return translated_text
 
     def translate_text_google(self, text: str, language_code: str):
+        """
+        Translates text using Google Translate.
+
+        Args:
+            text (str): The text to translate.
+            language_code (str): The target language code.
+
+        Returns:
+            str: The translated text.
+        """
         if not self.project_id:
             raise ValueError("Google project ID is required for Google Translate.")
         try:
@@ -75,6 +106,15 @@ class Translator:
             return ""
 
     def preprocess_text(self, text: str) -> str:
+        """
+        Preprocesses text for NLLB by stripping quotes and replacing newlines with spaces.
+
+        Args:
+            text (str): The text to preprocess.
+
+        Returns:
+            str: The preprocessed text.
+        """
         # Strip leading and trailing quotation marks and whitespace
         text = text.strip('"').strip()
         # Replace newline characters with spaces
@@ -82,6 +122,16 @@ class Translator:
         return text
 
     def translate_text_nllb(self, text: str, flores_code: str):
+        """
+        Translates text using the NLLB API.
+
+        Args:
+            text (str): The text to translate.
+            flores_code (str): The target language code in FLORES notation.
+
+        Returns:
+            str: The translated text.
+        """
         # Preprocess the text
         text = self.preprocess_text(text)
         url = 'https://winstxnhdw-nllb-api.hf.space/api/v2/translate'
@@ -103,6 +153,16 @@ class Translator:
             return ""
 
     def translate_instructions(self, instructions, language_code):
+        """
+        Translates a list of instructions into the specified language.
+
+        Args:
+            instructions (list): A list of instructions to translate.
+            language_code (str): The target language code.
+
+        Returns:
+            list: A list of translated instructions.
+        """
         translated_instructions = []
 
         for instruction in instructions:

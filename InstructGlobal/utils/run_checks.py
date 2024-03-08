@@ -2,6 +2,9 @@ import os
 import pandas as pd
 
 class Check:
+    """
+    Runs initial checks before processing data.
+    """
     def __init__(self, input_dir, api_key, model, target_language, language_code, size):
         self.input_dir = input_dir
         self.api_key = api_key

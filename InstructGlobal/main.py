@@ -11,6 +11,9 @@ from InstructGlobal.utils.construct_prompt import PromptConstructor
 BATCH_SIZE = 5
 
 class InstructGlobal:
+    """
+    InstructGlobal transform high quality datasets in non-instruction formats (e.g. classification, summarisation etc) into an instruction-following format.
+    """
     def __init__(self, openai_api_key, target_language, language_code, model="gpt-3.5-turbo", input_dir="input", output_dir="output", size=50000, google_project_id=None, translation_model="google"):
         self.openai_api_key = openai_api_key
         self.model = model

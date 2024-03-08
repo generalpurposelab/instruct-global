@@ -1,7 +1,28 @@
 import json
 
 class PromptConstructor:
+    """
+    A class to construct prompts for different tasks based on predefined templates and schemas.
+    
+    Attributes:
+        output_schema (dict): A dictionary containing the output schema for different task categories.
+        input_schema (dict): A dictionary containing the input schema for different task categories.
+        language_code (str): The target language code for the prompt construction.
+        prompts (dict): A dictionary loaded from a JSON file containing prompt templates.
+        
+    Methods:
+        __init__(self, output_schema, input_schema, language_code): Initializes the PromptConstructor with output schema, input schema, and language code.
+        construct_prompt(self, category, prompt, csv, batch_size): Constructs a prompt based on the given parameters.
+    """
     def __init__(self, output_schema, input_schema, language_code):
+        """
+        Initializes the PromptConstructor with the given output schema, input schema, and language code.
+            
+        Parameters:
+            output_schema (dict): The output schema for different task categories.
+            input_schema (dict): The input schema for different task categories.
+            language_code (str): The target language code for the prompts.
+        """
         self.output_schema = output_schema
         self.input_schema = input_schema
         self.language_code = language_code
@@ -9,6 +30,18 @@ class PromptConstructor:
             self.prompts = json.load(f)
 
     def construct_prompt(self, category, prompt, csv, batch_size):
+        """
+        Constructs a prompt for a given task category, prompt type, CSV file, and batch size.
+        
+        Parameters:
+            category (str): The task category for which the prompt is being constructed.
+            prompt (str): The type of prompt to be constructed.
+            csv (str): The name of the CSV file associated with the task category.
+            batch_size (int): The batch size for the task.
+            
+        Returns:
+            str: The constructed prompt based on the given parameters.
+        """
         # Fetch the corresponding prompt from prompts.json
         prompt_template = self.prompts[prompt]
         
