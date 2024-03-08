@@ -1,4 +1,4 @@
-# instruct-global
+# Instruct-global: aligning language models to follow instructions in low-resource languages
 
 Repo associated with the forthcoming paper 'Instruct-global: aligning language models to follow instructions in low-resource languages'. Instruct-global automates the process of generating instruction datasets in low-resource languages (LRLs). 
 
