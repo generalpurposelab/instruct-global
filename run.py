@@ -19,7 +19,7 @@ pipeline = InstructGlobal(
     output_dir=output_dir, 
     size=size, 
     translation_model=translation_model, 
-    # google_project_id=google_project_id, 
+    # google_project_id=google_project_id 
 )
 
 pipeline.run()
