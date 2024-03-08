@@ -1,6 +1,6 @@
 # instruct-global
 
-instruct-globalsemi-automates the generations of instruction fine-tuning datasets in low-resource languages (LRLs). 
+instruct-global automates the generations of instruction fine-tuning datasets in low-resource languages (LRLs). 
 
 ## Background
 
