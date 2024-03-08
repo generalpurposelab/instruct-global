@@ -1,6 +1,6 @@
 # instruct-global
 
-instruct-global automates the generations of instruction fine-tuning datasets in low-resource languages (LRLs). 
+Repo associated with the forthcoming paper 'Instruct-global: aligning language models to follow instructions in low-resource languages'. Instruct-global automates the process of generating instruction datasets in low-resource languages (LRLs). 
 
 ## Background
 
